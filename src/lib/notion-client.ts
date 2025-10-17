@@ -52,7 +52,7 @@ export async function getArtworks(): Promise<Artwork[]> {
           },
         ],
       }),
-      next: { revalidate: 0 },
+      next: { revalidate: 3600 },
     }
   );
 
@@ -68,7 +68,7 @@ export async function getArtworks(): Promise<Artwork[]> {
     return {
       id: page.id,
       title: props.Título?.title?.[0]?.plain_text || '',
-     image: props.Imagen?.files?.[0]?.file?.url || props.Imagen?.files?.[0]?.external?.url || '',
+      image: props.Imagen?.files?.[0]?.file?.url || props.Imagen?.files?.[0]?.external?.url || '',
       technique: props.Técnica?.rich_text?.[0]?.plain_text || '',
       year: props.Año?.number || 0,
       extraInfo: props['Info Extra']?.rich_text?.[0]?.plain_text || '',
@@ -76,25 +76,77 @@ export async function getArtworks(): Promise<Artwork[]> {
   });
 }
 
+// Obtener un artwork individual
+export async function getArtwork(id: string): Promise<Artwork | null> {
+  try {
+    const response = await fetch(
+      `https://api.notion.com/v1/pages/${id}`,
+      {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${process.env.NOTION_API_KEY}`,
+          'Notion-Version': '2022-06-28',
+        },
+        next: { revalidate: 3600 },
+      }
+    );
+
+    if (!response.ok) {
+      return null;
+    }
+
+    const page: any = await response.json();
+    const props = page.properties;
+    
+    return {
+      id: page.id,
+      title: props.Título?.title?.[0]?.plain_text || '',
+      image: props.Imagen?.files?.[0]?.file?.url || props.Imagen?.files?.[0]?.external?.url || '',
+      technique: props.Técnica?.rich_text?.[0]?.plain_text || '',
+      year: props.Año?.number || 0,
+      extraInfo: props['Info Extra']?.rich_text?.[0]?.plain_text || '',
+    };
+  } catch (error) {
+    return null;
+  }
+}
+
 // Obtener Blog Posts
 export async function getBlogPosts(): Promise<BlogPost[]> {
-  const response = await (notion.databases as any).query({
-    database_id: process.env.NOTION_BLOG_DB_ID!,
-    filter: {
-      property: 'Published',
-      checkbox: {
-        equals: true,
+  const response = await fetch(
+    `https://api.notion.com/v1/databases/${process.env.NOTION_BLOG_DB_ID}/query`,
+    {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${process.env.NOTION_API_KEY}`,
+        'Notion-Version': '2022-06-28',
+        'Content-Type': 'application/json',
       },
-    },
-    sorts: [
-      {
-        property: 'Date',
-        direction: 'descending',
-      },
-    ],
-  });
+      body: JSON.stringify({
+        filter: {
+          property: 'Published',
+          checkbox: {
+            equals: true,
+          },
+        },
+        sorts: [
+          {
+            property: 'Date',
+            direction: 'descending',
+          },
+        ],
+      }),
+      next: { revalidate: 3600 },
+    }
+  );
 
-  return response.results.map((page: any) => {
+  if (!response.ok) {
+    throw new Error(`Error fetching blog posts: ${response.statusText}`);
+  }
+
+  const data = await response.json();
+
+  return data.results.map((page: any) => {
     const props = page.properties;
     
     return {
@@ -110,21 +162,38 @@ export async function getBlogPosts(): Promise<BlogPost[]> {
 
 // Obtener un post individual con contenido
 export async function getBlogPost(slug: string): Promise<BlogPost | null> {
-  const response = await (notion.databases as any).query({
-    database_id: process.env.NOTION_BLOG_DB_ID!,
-    filter: {
-      property: 'Slug',
-      rich_text: {
-        equals: slug,
+  const response = await fetch(
+    `https://api.notion.com/v1/databases/${process.env.NOTION_BLOG_DB_ID}/query`,
+    {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${process.env.NOTION_API_KEY}`,
+        'Notion-Version': '2022-06-28',
+        'Content-Type': 'application/json',
       },
-    },
-  });
+      body: JSON.stringify({
+        filter: {
+          property: 'Slug',
+          rich_text: {
+            equals: slug,
+          },
+        },
+      }),
+      next: { revalidate: 3600 },
+    }
+  );
 
-  if (response.results.length === 0) {
+  if (!response.ok) {
+    throw new Error(`Error fetching blog post: ${response.statusText}`);
+  }
+
+  const data = await response.json();
+
+  if (data.results.length === 0) {
     return null;
   }
 
-  const page: any = response.results[0];
+  const page: any = data.results[0];
   const props = page.properties;
   
   // Convertir el contenido de Notion a Markdown

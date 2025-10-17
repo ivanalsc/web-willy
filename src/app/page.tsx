@@ -1,13 +1,12 @@
 // app/page.tsx
 import { getArtworks } from '@/lib/notion-client';
 import Image from 'next/image';
+import Link from 'next/link';
 
-export const revalidate = 3600; // Revalidar cada hora
+export const revalidate = 0; // Revalidar cada hora
 
 export default async function Home() {
   const artworks = await getArtworks();
-
-  console.log('Artworks fetched:', artworks);
 
   return (
     <main className="min-h-screen p-8 max-w-7xl mx-auto">
@@ -15,8 +14,9 @@ export default async function Home() {
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {artworks.map((artwork) => (
-          <div 
-            key={artwork.id} 
+          <Link
+            key={artwork.id}
+            href={`/artwork/${artwork.id}`}
             className="group relative overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
           >
             <div className="aspect-square relative bg-gray-100">
@@ -43,7 +43,7 @@ export default async function Home() {
                 <p className="text-sm text-gray-700 mt-2">{artwork.extraInfo}</p>
               )}
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </main>
