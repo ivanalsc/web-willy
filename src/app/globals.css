@@ -26,3 +26,6 @@ body {
   font-family: "transducer-extended", sans-serif;
   font-weight: 900;
 }
+.hero{
+  max-height: 90vh;
+}

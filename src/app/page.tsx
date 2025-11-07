@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import About from './components/About';
 import './gallery.css';
+import Hero from './components/Hero';
 
 export const revalidate = 0;
 
@@ -16,6 +17,7 @@ export default async function Home() {
       <div className="relative overflow-hidden">
         <div className="absolute inset-0"></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
+          <Hero />
           <About />
           <div className="text-center space-y-4 animate-fade-in">
             <h2 className="text-4xl font-bold black-text">
@@ -68,7 +70,7 @@ export default async function Home() {
 
                 {/* Content */}
                 <div className="p-5 sm:p-6 space-y-3">
-                  <h2 className="gallery-title px-3">
+                  <h2 className="gallery-title px-3 black-text">
                     {artwork.title}
                   </h2>
 
