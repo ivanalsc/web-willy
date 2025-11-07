@@ -7,7 +7,7 @@ const Hero = () => {
     <Image 
     src="/Automatic.gif"
     alt="SONGOD"
-    width={1000}
+    width={500}
     height={500}
     className='hero'
     />
