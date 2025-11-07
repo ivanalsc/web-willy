@@ -14,7 +14,7 @@ export default function Header() {
             <Link href="/" className="text-sm font-medium text-gray-900 hover:text-gray-600 transition-colors">
               SONGOD ®
             </Link>
-            <Link href="/about" className="text-sm font-medium text-gray-900 hover:text-gray-600 transition-colors">
+            <Link href="#about" className="text-sm font-medium text-gray-900 hover:text-gray-600 transition-colors">
               About
             </Link>
           </nav>
@@ -35,13 +35,11 @@ export default function Header() {
           {/* Right Icons */}
           <div className="flex items-center gap-4 min-w-[200px]">
             <a
-              href="https://instagram.com"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="#contacto"
               className="text-gray-900 hover:text-gray-600 transition-colors"
               aria-label="Instagram"
             >
-              <Instagram className="h-5 w-5" />
+              Contacto
             </a>
           
           </div>

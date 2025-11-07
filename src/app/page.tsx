@@ -5,6 +5,7 @@ import Link from 'next/link';
 import About from './components/About';
 import './gallery.css';
 import Hero from './components/Hero';
+import Contact from './components/Contact';
 
 export const revalidate = 0;
 
@@ -25,6 +26,7 @@ export default async function Home() {
             </h2>
          
           </div>
+
         </div>
       </div>
 
@@ -121,6 +123,7 @@ export default async function Home() {
           </div>
         )}
       </div>
+      <Contact />
     </main>
   );
 }

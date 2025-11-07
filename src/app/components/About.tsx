@@ -2,7 +2,7 @@ import React from 'react'
 
 const About = () => {
   return (
-    <div>
+    <div id="about">
     <h1 className="text-4xl font-bold text-center black-text">¿QUÉ ES SONGOD?</h1>
     <p className='my-8 text-center'>
       Somos SONGOD, una marca de arte expandido creada por Sergio Páez, artista visual y diseñador multidisciplinario.
