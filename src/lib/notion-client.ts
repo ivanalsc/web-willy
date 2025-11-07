@@ -64,10 +64,10 @@ export async function getArtworks(): Promise<Artwork[]> {
 
   return data.results.map((page: any) => {
     const props = page.properties;
-    
+    console.log("props:", props);
     return {
       id: page.id,
-      title: props.Título?.title?.[0]?.plain_text || '',
+      title: props['Título - Title']?.title?.[0]?.plain_text || '',
       image: props.Imagen?.files?.[0]?.file?.url || props.Imagen?.files?.[0]?.external?.url || '',
       technique: props.Técnica?.rich_text?.[0]?.plain_text || '',
       year: props.Año?.number || 0,
@@ -100,7 +100,7 @@ export async function getArtwork(id: string): Promise<Artwork | null> {
     
     return {
       id: page.id,
-      title: props.Título?.title?.[0]?.plain_text || '',
+      title: props['Título - Title']?.title?.[0]?.plain_text || '',
       image: props.Imagen?.files?.[0]?.file?.url || props.Imagen?.files?.[0]?.external?.url || '',
       technique: props.Técnica?.rich_text?.[0]?.plain_text || '',
       year: props.Año?.number || 0,
@@ -151,7 +151,7 @@ export async function getBlogPosts(): Promise<BlogPost[]> {
     
     return {
       id: page.id,
-      title: props.Title?.title?.[0]?.plain_text || '',
+      title: props['Título - Title']?.title?.[0]?.plain_text || '',
       slug: props.Slug?.rich_text?.[0]?.plain_text || '',
       excerpt: props.Excerpt?.rich_text?.[0]?.plain_text || '',
       coverImage: props.Cover?.files?.[0]?.file?.url || props.Cover?.files?.[0]?.external?.url || '',
@@ -202,7 +202,7 @@ export async function getBlogPost(slug: string): Promise<BlogPost | null> {
 
   return {
     id: page.id,
-    title: props.Title?.title?.[0]?.plain_text || '',
+    title: props['Título - Title']?.title?.[0]?.plain_text || '',
     slug: props.Slug?.rich_text?.[0]?.plain_text || '',
     excerpt: props.Excerpt?.rich_text?.[0]?.plain_text || '',
     coverImage: props.Cover?.files?.[0]?.file?.url || props.Cover?.files?.[0]?.external?.url || '',

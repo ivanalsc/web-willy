@@ -1,0 +1,147 @@
+/* app/gallery.css */
+
+/* Animations */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.8s ease-out;
+}
+
+.animate-slide-up {
+  animation: slide-up 0.6s ease-out both;
+}
+
+/* Gallery Card */
+.gallery-card {
+  position: relative;
+  height: 100%;
+  background-color: white;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  transition: all 0.5s ease-out;
+  transform: translateY(0);
+}
+
+.gallery-card:hover {
+  /* box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25); */
+  transform: translateY(-0.5rem);
+}
+
+/* Gallery Image */
+.gallery-image {
+  object-fit: cover;
+  transition: all 0.7s ease-out;
+}
+
+.group:hover .gallery-image {
+  transform: scale(1.1) rotate(1deg);
+}
+
+/* Gallery Overlay */
+.gallery-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0), rgba(0, 0, 0, 0));
+  opacity: 0;
+  transition: opacity 0.5s ease-out;
+  z-index: 10;
+}
+
+.group:hover .gallery-overlay {
+  opacity: 1;
+}
+
+/* Gallery Badge */
+.gallery-badge {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  z-index: 20;
+  opacity: 0;
+  transform: translateY(0.5rem);
+  transition: all 0.3s ease-out;
+}
+
+.group:hover .gallery-badge {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Gallery Title */
+.gallery-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  transition: color 0.3s ease-out;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  text-align: center;
+  border: 1px solid #111;
+}
+
+@media (min-width: 640px) {
+  .gallery-title {
+    font-size: 1.5rem;
+  }
+}
+
+.group:hover .gallery-title {
+  background: #111;
+  color: #fff;
+}
+
+/* Gallery Accent Line */
+.gallery-accent {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 0.25rem;
+  background: linear-gradient(to right, #69b9f9, #f2cf35);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s ease-out;
+}
+
+.group:hover .gallery-accent {
+  transform: scaleX(1);
+}
+
+/* Accessibility: Reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in,
+  .animate-slide-up {
+    animation: none;
+  }
+
+  .gallery-card,
+  .gallery-image,
+  .gallery-overlay,
+  .gallery-badge,
+  .gallery-title,
+  .gallery-accent {
+    transition: none;
+  }
+}
