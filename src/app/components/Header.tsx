@@ -6,7 +6,7 @@ import { Instagram } from "lucide-react"
 
 export default function Header() {
   return (
-    <header className="w-full border-b border-gray-200 bg-white">
+    <header className="w-full border-b border-gray-200">
       <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           {/* Left Navigation */}
@@ -14,7 +14,7 @@ export default function Header() {
             <Link href="/" className="text-sm font-medium text-gray-900 hover:text-gray-600 transition-colors">
               SONGOD ®
             </Link>
-            <Link href="#about" className="text-sm font-medium text-gray-900 hover:text-gray-600 transition-colors">
+            <Link href="#about" className=" font-medium text-gray-900 hover:text-gray-600 transition-colors">
               About
             </Link>
           </nav>
