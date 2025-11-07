@@ -2,48 +2,45 @@
 
 import Link from "next/link"
 import Image from "next/image"
-import { Instagram } from "lucide-react"
 
 export default function Header() {
   return (
     <header className="w-full border-b border-gray-200">
-      <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between">
-          {/* Left Navigation */}
-          <nav className="flex items-center gap-8">
-            <Link href="/" className="text-sm font-medium text-gray-900 hover:text-gray-600 transition-colors">
-              SONGOD ®
-            </Link>
-            <Link href="#about" className=" font-medium text-gray-900 hover:text-gray-600 transition-colors">
-              About
-            </Link>
-          </nav>
+      <div className="relative mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8 flex items-center justify-center">
+        
+        {/* Left */}
+        <nav className="absolute left-4 sm:left-6 lg:left-8 flex items-center gap-6">
+          <Link href="/" className="text-sm font-medium text-gray-900 hover:text-gray-600 transition-colors">
+            SONGOD
+          </Link>
+          <Link href="#about" className="text-sm font-medium text-gray-900 hover:text-gray-600 transition-colors hidden sm:block">
+            About
+          </Link>
+        </nav>
 
-          {/* Center Logo - Animated */}
-          <div className="flex-shrink-0">
-            <Image
-              src="/songod-animated-gif.gif"
-              alt="SONGOD Logo"
-              width={150}
-              height={150}
-              priority
-              unoptimized
-              className="h-30 w-auto"
-            />
-          </div>
-
-          {/* Right Icons */}
-          <div className="flex items-center gap-4 min-w-[200px]">
-            <a
-              href="#contacto"
-              className="text-gray-900 hover:text-gray-600 transition-colors"
-              aria-label="Instagram"
-            >
-              Contacto
-            </a>
-          
-          </div>
+        {/* Center Logo */}
+        <div className="flex-shrink-0">
+          <Image
+            src="/songod-animated-gif.gif"
+            alt="SONGOD Logo"
+            width={150}
+            height={150}
+            priority
+            unoptimized
+            className="h-16 sm:h-20 w-auto mx-auto"
+          />
         </div>
+
+        {/* Right */}
+        <div className="absolute right-4 sm:right-6 lg:right-8">
+          <Link
+            href="#contacto"
+            className="text-sm font-medium text-gray-900 hover:text-gray-600 transition-colors"
+          >
+            Contacto
+          </Link>
+        </div>
+
       </div>
     </header>
   )
