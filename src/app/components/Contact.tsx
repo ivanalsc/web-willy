@@ -5,9 +5,9 @@ import React from 'react'
 const Contact = () => {
   return (
     <div id='contacto' className='flex items-center justify-around'>
-        <div className='flex items-center gap-4'>
-        <Instagram className="h-10 w-10" />
-        <Mail className="h-10 w-10" />
+        <div className='flex flex-col items-start gap-4'>
+          <p>Por consultas, escribime a <a href="mailto:srpaez@gmail.com" className='underline'>srpaez@gmail.com</a></p>
+        
         </div>
         <div>
             <Image
