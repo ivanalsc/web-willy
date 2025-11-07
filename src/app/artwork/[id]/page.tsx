@@ -15,8 +15,9 @@ export async function generateStaticParams() {
   }));
 }
 
-export default async function ArtworkPage({ params }: { params: { id: string } }) {
-  const artwork = await getArtwork(params.id);
+export default async function ArtworkPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const artwork = await getArtwork(id);
 
   if (!artwork) {
     notFound();
