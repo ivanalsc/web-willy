@@ -1,8 +1,8 @@
 // app/artwork/[id]/page.tsx
 import { getArtwork, getArtworks } from '@/lib/notion-client';
-import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import SafeImage from '@/app/components/SafeImage';
 
 export const revalidate = 3600;
 
@@ -48,21 +48,15 @@ export default async function ArtworkPage({ params }: { params: Promise<{ id: st
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
           {/* Imagen */}
-          <div className="relative w-full aspect-square  overflow-hidden shadow-2xl">
-            {artwork.image ? (
-              <Image
-                src={artwork.image}
-                alt={artwork.title}
-                fill
-                className="object-cover"
-                priority
-                sizes="(max-width: 1024px) 100vw, 50vw"
-              />
-            ) : (
-              <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                <span className="text-gray-400">Sin imagen</span>
-              </div>
-            )}
+          <div className="relative w-full aspect-square overflow-hidden shadow-2xl">
+            <SafeImage
+              src={artwork.image || ''}
+              alt={artwork.title}
+              fill
+              className="object-cover"
+              priority
+              sizes="(max-width: 1024px) 100vw, 50vw"
+            />
           </div>
 
           {/* Información */}
@@ -82,10 +76,13 @@ export default async function ArtworkPage({ params }: { params: Promise<{ id: st
                   <span className="font-semibold text-gray-700">Año:</span>
                   <span className="ml-2">{artwork.year}</span>
                 </div>
-                <div>
                 
-                </div>
-                
+                {artwork.priceFormatted && (
+                  <div className="bg-gray-100 px-4 py-2">
+                    <span className="font-semibold text-gray-700">Precio:</span>
+                    <span className="ml-2">{artwork.priceFormatted}</span>
+                  </div>
+                )}
               </div>
             </div>
 

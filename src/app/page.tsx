@@ -1,13 +1,13 @@
 
 import { getArtworks } from '@/lib/notion-client';
-import Image from 'next/image';
 import Link from 'next/link';
 import About from './components/About';
 import './gallery.css';
 import Hero from './components/Hero';
 import Contact from './components/Contact';
+import SafeImage from './components/SafeImage';
 
-export const revalidate = 0;
+export const revalidate = 3600;
 
 export default async function Home() {
   const artworks = await getArtworks();
@@ -43,31 +43,29 @@ export default async function Home() {
               <article className="gallery-card">
                 {/* Image Container */}
                 <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
-                  {artwork.image && (
-                    <>
-                      {/* Overlay gradient on hover */}
-                      <div className="gallery-overlay"></div>
-                      
-                      <Image
-                        src={artwork.image}
-                        alt={artwork.title}
-                        fill
-                        className="gallery-image"
-                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                        priority={index < 3}
-                      />
-                      
-                      {/* Floating "Ver más" badge */}
-                      {/* <div className="gallery-badge">
-                        <span className="inline-flex items-center gap-2 px-4 py-2 bg-white/95 backdrop-blur-sm rounded-full text-sm font-medium text-gray-900 shadow-lg">
-                          Ver más
-                          <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                          </svg>
-                        </span>
-                      </div> */}
-                    </>
-                  )}
+                  <>
+                    {/* Overlay gradient on hover */}
+                    <div className="gallery-overlay"></div>
+                    
+                    <SafeImage
+                      src={artwork.image || ''}
+                      alt={artwork.title}
+                      fill
+                      className="gallery-image"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      priority={index < 3}
+                    />
+                    
+                    {/* Floating "Ver más" badge */}
+                    {/* <div className="gallery-badge">
+                      <span className="inline-flex items-center gap-2 px-4 py-2 bg-white/95 backdrop-blur-sm rounded-full text-sm font-medium text-gray-900 shadow-lg">
+                        Ver más
+                        <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </span>
+                    </div> */}
+                  </>
                 </div>
 
                 {/* Content */}

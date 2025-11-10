@@ -12,6 +12,23 @@ const notion = new Client({
 
 const n2m = new NotionToMarkdown({ notionClient: notion });
 
+function formatCurrency(value?: number | null): string {
+  if (typeof value !== 'number' || Number.isNaN(value)) {
+    return '';
+  }
+
+  try {
+    return new Intl.NumberFormat('es-AR', {
+      style: 'currency',
+      currency: 'ARS',
+      maximumFractionDigits: 0,
+    }).format(value);
+  } catch (error) {
+    console.warn('Error formateando precio:', error);
+    return value.toString();
+  }
+}
+
 // Tipos para Artworks
 export interface Artwork {
   id: string;
@@ -20,6 +37,8 @@ export interface Artwork {
   technique: string;
   year: number;
   extraInfo: string;
+  price: number | null;
+  priceFormatted: string;
 }
 
 // Tipos para Blog Posts
@@ -65,13 +84,41 @@ export async function getArtworks(): Promise<Artwork[]> {
   return data.results.map((page: any) => {
     const props = page.properties;
     console.log("props:", props);
+    const priceValue = typeof props.Precio?.number === 'number' ? props.Precio.number : null;
+    
+    // Obtener URL de imagen con mejor manejo
+    let imageUrl = '';
+    const imageFile = props.Imagen?.files?.[0];
+    if (imageFile) {
+      // Priorizar file.url (archivos de Notion) sobre external.url
+      imageUrl = imageFile.file?.url || imageFile.external?.url || '';
+      
+      // Validar que la URL sea válida
+      if (imageUrl) {
+        // Asegurarse de que la URL sea absoluta
+        if (!imageUrl.startsWith('http://') && !imageUrl.startsWith('https://')) {
+          imageUrl = `https://${imageUrl}`;
+        }
+        
+        // Validar formato de URL
+        try {
+          new URL(imageUrl);
+        } catch (e) {
+          console.warn('URL de imagen inválida:', imageUrl);
+          imageUrl = '';
+        }
+      }
+    }
+    
     return {
       id: page.id,
       title: props['Título - Title']?.title?.[0]?.plain_text || '',
-      image: props.Imagen?.files?.[0]?.file?.url || props.Imagen?.files?.[0]?.external?.url || '',
+      image: imageUrl,
       technique: props.Técnica?.rich_text?.[0]?.plain_text || '',
       year: props.Año?.number || 0,
       extraInfo: props['Info Extra']?.rich_text?.[0]?.plain_text || '',
+      price: priceValue,
+      priceFormatted: formatCurrency(priceValue),
     };
   });
 }
@@ -97,14 +144,41 @@ export async function getArtwork(id: string): Promise<Artwork | null> {
 
     const page: any = await response.json();
     const props = page.properties;
+    const priceValue = typeof props.Precio?.number === 'number' ? props.Precio.number : null;
+    
+    // Obtener URL de imagen con mejor manejo
+    let imageUrl = '';
+    const imageFile = props.Imagen?.files?.[0];
+    if (imageFile) {
+      // Priorizar file.url (archivos de Notion) sobre external.url
+      imageUrl = imageFile.file?.url || imageFile.external?.url || '';
+      
+      // Validar que la URL sea válida
+      if (imageUrl) {
+        // Asegurarse de que la URL sea absoluta
+        if (!imageUrl.startsWith('http://') && !imageUrl.startsWith('https://')) {
+          imageUrl = `https://${imageUrl}`;
+        }
+        
+        // Validar formato de URL
+        try {
+          new URL(imageUrl);
+        } catch (e) {
+          console.warn('URL de imagen inválida:', imageUrl);
+          imageUrl = '';
+        }
+      }
+    }
     
     return {
       id: page.id,
       title: props['Título - Title']?.title?.[0]?.plain_text || '',
-      image: props.Imagen?.files?.[0]?.file?.url || props.Imagen?.files?.[0]?.external?.url || '',
+      image: imageUrl,
       technique: props.Técnica?.rich_text?.[0]?.plain_text || '',
       year: props.Año?.number || 0,
       extraInfo: props['Info Extra']?.rich_text?.[0]?.plain_text || '',
+      price: priceValue,
+      priceFormatted: formatCurrency(priceValue),
     };
   } catch (error) {
     return null;
