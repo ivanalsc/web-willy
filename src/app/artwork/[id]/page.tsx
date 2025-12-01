@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import SafeImage from '@/app/components/SafeImage';
 
-export const revalidate = 3600;
+export const revalidate = 300;
 
 // Generar static params para ISR
 export async function generateStaticParams() {

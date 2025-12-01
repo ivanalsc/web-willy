@@ -3,7 +3,7 @@ import { getBlogPosts } from '@/lib/notion-client';
 import Image from 'next/image';
 import Link from 'next/link';
 
-export const revalidate = 3600;
+export const revalidate = 300;
 
 export default async function BlogPage() {
   const posts = await getBlogPosts();

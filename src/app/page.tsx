@@ -7,7 +7,7 @@ import Hero from './components/Hero';
 import Contact from './components/Contact';
 import SafeImage from './components/SafeImage';
 
-export const revalidate = 3600;
+export const revalidate = 300;
 
 export default async function Home() {
   const artworks = await getArtworks();

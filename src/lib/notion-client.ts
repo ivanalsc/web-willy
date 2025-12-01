@@ -71,7 +71,7 @@ export async function getArtworks(): Promise<Artwork[]> {
           },
         ],
       }),
-      next: { revalidate: 3600 },
+      next: { revalidate: 300 },
     }
   );
 
@@ -134,7 +134,7 @@ export async function getArtwork(id: string): Promise<Artwork | null> {
           'Authorization': `Bearer ${process.env.NOTION_API_KEY}`,
           'Notion-Version': '2022-06-28',
         },
-        next: { revalidate: 3600 },
+        next: { revalidate: 300 },
       }
     );
 
@@ -210,7 +210,7 @@ export async function getBlogPosts(): Promise<BlogPost[]> {
           },
         ],
       }),
-      next: { revalidate: 3600 },
+      next: { revalidate: 300 },
     }
   );
 
@@ -253,7 +253,7 @@ export async function getBlogPost(slug: string): Promise<BlogPost | null> {
           },
         },
       }),
-      next: { revalidate: 3600 },
+      next: { revalidate: 300 },
     }
   );
 
