@@ -58,6 +58,7 @@ export async function getArtworks(): Promise<Artwork[]> {
     `https://api.notion.com/v1/databases/${process.env.NOTION_ARTWORKS_DB_ID}/query`,
     {
       method: 'POST',
+      cache: 'no-store', // evitar URLs firmadas vencidas de Notion
       headers: {
         'Authorization': `Bearer ${process.env.NOTION_API_KEY}`,
         'Notion-Version': '2022-06-28',
@@ -83,7 +84,7 @@ export async function getArtworks(): Promise<Artwork[]> {
 
   return data.results.map((page: any) => {
     const props = page.properties;
-    console.log("props:", props);
+    //console.log("props:", props);
     const priceValue = typeof props.Precio?.number === 'number' ? props.Precio.number : null;
     
     // Obtener URL de imagen con mejor manejo
@@ -130,6 +131,7 @@ export async function getArtwork(id: string): Promise<Artwork | null> {
       `https://api.notion.com/v1/pages/${id}`,
       {
         method: 'GET',
+        cache: 'no-store', // evitar URLs firmadas vencidas de Notion
         headers: {
           'Authorization': `Bearer ${process.env.NOTION_API_KEY}`,
           'Notion-Version': '2022-06-28',
