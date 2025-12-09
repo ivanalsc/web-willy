@@ -28,11 +28,15 @@ export default function SafeImage({
 }: SafeImageProps) {
   const [hasError, setHasError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [retryCount, setRetryCount] = useState(0);
+  const [imageKey, setImageKey] = useState(0);
 
   // Resetear estado cuando src cambia
   useEffect(() => {
     setHasError(false);
     setIsLoading(true);
+    setRetryCount(0);
+    setImageKey((prev) => prev + 1);
   }, [src]);
 
   // Validar que la URL no esté vacía
@@ -72,6 +76,7 @@ export default function SafeImage({
         </div>
       )}
       <Image
+        key={imageKey}
         src={src}
         alt={alt}
         fill={fill}
@@ -81,7 +86,16 @@ export default function SafeImage({
         sizes={sizes}
         priority={priority}
         style={{ ...style, opacity: isLoading ? 0 : 1, transition: 'opacity 0.3s' }}
+        // A veces el primer request puede fallar por un 403/timeout transitorio.
+        // Permitimos un reintento silencioso antes de mostrar el placeholder.
         onError={() => {
+          if (retryCount < 1) {
+            setRetryCount((prev) => prev + 1);
+            setIsLoading(true);
+            setHasError(false);
+            setImageKey((prev) => prev + 1); // fuerza a Next/Image a reintentar
+            return;
+          }
           setHasError(true);
           setIsLoading(false);
         }}
