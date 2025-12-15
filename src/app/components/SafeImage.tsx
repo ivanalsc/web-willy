@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 interface SafeImageProps {
   src: string;
@@ -28,14 +28,14 @@ export default function SafeImage({
 }: SafeImageProps) {
   const [hasError, setHasError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [retryCount, setRetryCount] = useState(0);
+  const retryCountRef = useRef(0);
   const [imageKey, setImageKey] = useState(0);
 
   // Resetear estado cuando src cambia
   useEffect(() => {
     setHasError(false);
     setIsLoading(true);
-    setRetryCount(0);
+    retryCountRef.current = 0;
     setImageKey((prev) => prev + 1);
   }, [src]);
 
@@ -89,11 +89,14 @@ export default function SafeImage({
         // A veces el primer request puede fallar por un 403/timeout transitorio.
         // Permitimos un reintento silencioso antes de mostrar el placeholder.
         onError={() => {
-          if (retryCount < 1) {
-            setRetryCount((prev) => prev + 1);
-            setIsLoading(true);
-            setHasError(false);
-            setImageKey((prev) => prev + 1); // fuerza a Next/Image a reintentar
+          if (retryCountRef.current < 1) {
+            retryCountRef.current += 1;
+            // Agregar un pequeño delay antes del reintento para evitar condiciones de carrera
+            setTimeout(() => {
+              setIsLoading(true);
+              setHasError(false);
+              setImageKey((prev) => prev + 1); // fuerza a Next/Image a reintentar
+            }, 300);
             return;
           }
           setHasError(true);
